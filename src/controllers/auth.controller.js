@@ -18,7 +18,14 @@ const login = async (req, res) => {
 			{ expiresIn: "24h" },
 		);
 
-		res.json({ token });
+		res.cookie("token", token, {
+			httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
+			secure: process.env.NODE_ENV === "production", // Use HTTPS in production
+			sameSite: "strict", // Prevents CSRF attacks
+			maxAge: 3600000, // Cookie expiration time in milliseconds (1 hour)
+		});
+
+		return res.status(200).json({ message: "Login successful" });
 	} catch (error) {
 		handleError(res, error);
 	}
