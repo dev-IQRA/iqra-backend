@@ -2,10 +2,15 @@
   "name": "iqra-backend",
   "version": "0.0.0",
   "private": true,
+  "main": "./src/server.js",
   "scripts": {
-    "start": "node ./bin/www"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/server.mjs",
+    "serve": "node src/server.mjs",
+    "format": "prettier --write ."
   },
   "dependencies": {
+    "@prisma/client": "^6.7.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dotenv": "^16.5.0",
@@ -13,5 +18,8 @@
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
     "pug": "2.0.0-beta11"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4"
   }
 }
