@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const passport = require("./strategies/jwt-strategy");
 const cors = require("cors");
 const checkEnv = require("./utils/checkEnv");
+const cookieMiddleware = require("./middleware/cookieMiddleware");
 require("dotenv").config();
 
 const routes = require("./routes/index.js");
@@ -15,7 +16,7 @@ checkEnv();
 //middlewares
 app.use(json());
 app.use(cookieParser(process.env.SECRET_KEY_SESSION));
-
+app.use(cookieMiddleware);
 //ensure env
 
 app.use(passport.initialize());
