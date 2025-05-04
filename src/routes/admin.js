@@ -3,6 +3,7 @@ const { registerUser } = require("../controllers/admin.controller");
 const {
 	authenticate,
 	authorizeAdmin,
+	preventLoginIfLoggedIn
 } = require("../middleware/authMiddleware.js");
 const validateRequest = require("../middleware/validateRequest");
 const { registerSchema } = require("../validators/registerValidator");
@@ -10,9 +11,9 @@ const adminRouter = Router();
 
 adminRouter.post(
 	"/api/admin/register",
-	validateRequest(registerSchema),
-	authenticate,
 	authorizeAdmin,
+	authenticate,
+	validateRequest(registerSchema),
 	registerUser,
 );
 
