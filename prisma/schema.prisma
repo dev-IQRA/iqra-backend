@@ -25,7 +25,6 @@ model user {
   email        String                   @unique
   full_name    String
   birth_date   DateTime?
-  kelas        String?
   phone_number String?
   hash         String?
   role         user_identity_role_enum?
