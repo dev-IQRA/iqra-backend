@@ -9,4 +9,11 @@ const authorizeAdmin = (req, res, next) => {
 	return res.status(403).json({ message: "Access denied" });
 };
 
-module.exports = { authenticate, authorizeAdmin };
+const preventLoginIfLoggedIn = (req, res, next) => {
+	const token = req.cookies?.token;
+	if (token) {
+		return res.status(400).json({ message: "You are already logged in." });
+	}
+	next();
+};
+module.exports = { authenticate, authorizeAdmin, preventLoginIfLoggedIn };
