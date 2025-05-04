@@ -3,7 +3,6 @@ const { registerUser } = require("../controllers/admin.controller");
 const {
 	authenticate,
 	authorizeAdmin,
-	preventLoginIfLoggedIn
 } = require("../middleware/authMiddleware.js");
 const validateRequest = require("../middleware/validateRequest");
 const { registerSchema } = require("../validators/registerValidator");
