@@ -1,6 +1,3 @@
-Here’s a concise and professional `README.md` for your project:
-
-```markdown
 # IQRA
 
 A Node.js-based application for managing students authentication, registration, and role-based access control using Express, Prisma, and JWT.
@@ -114,6 +111,3 @@ src/
 ## License
 
 This project is licensed under the MIT License. See the `LICENSE` file for details.
-```
-
-Replace placeholders like `your-username` and `your-repo` with actual values. Add more details if needed.
