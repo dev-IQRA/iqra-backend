@@ -3,7 +3,7 @@ const { hashPassword } = require("../utils/passwordUtils");
 const handleError = require("../utils/errorHandler");
 
 const registerUser = async (req, res) => {
-    const { email, password, role } = req.body;
+    const { full_name ,email, password, role } = req.body;
 
     try {
         const existingUser = await findUserByEmail(email);
@@ -12,7 +12,7 @@ const registerUser = async (req, res) => {
         }
 
         const hash = await hashPassword(password);
-        const newUser = await createUser({ email, hash, role });
+        const newUser = await createUser({full_name, email, hash, role });
 
         res.status(201).json({ message: "User registered successfully", user: newUser });
     } catch (error) {
