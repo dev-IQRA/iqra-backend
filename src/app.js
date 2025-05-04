@@ -1,8 +1,7 @@
 const express = require("express");
 const { json } = require("express");
-const passport = require("passport");
 const cookieParser = require("cookie-parser");
-require("@dotenvx/dotenvx/config");
+require("dotenv").config();
 
 const routes = require("./routes/index.js");
 const app = express();
