@@ -10,9 +10,13 @@ const adminRouter = Router();
 
 adminRouter.post(
 	"/api/admin/register",
-	authorizeAdmin,
+adminRouter.post(
+	"/api/admin/register",
 	authenticate,
+	authorizeAdmin,
 	validateRequest(registerSchema),
+	registerUser,
+);
 	registerUser,
 );
 
