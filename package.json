@@ -8,7 +8,10 @@
     "dev": "nodemon src/server.mjs",
     "serve": "node src/server.mjs",
     "format": "biome format --write src/",
-    "fix": "biome lint --write ./src"
+    "fix": "biome lint --write ./src",
+    "migrate": "prisma migrate deploy",
+    "db:push": "prisma db push",
+    "prisma:generate": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^6.7.0",
