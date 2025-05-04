@@ -3,6 +3,7 @@ const checkEnv = () => {
 		"JWT_TOKEN_SECRET",
 		"DATABASE_URL",
 		"REFRESH_TOKEN_SECRET",
+		"SECRET_KEY_SESSION",
 	];
 	const missing = requiredEnvVars.filter((v) => !process.env[v]);
 	if (missing.length) {
