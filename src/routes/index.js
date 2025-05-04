@@ -8,7 +8,7 @@ router.use(authRouter);
 router.use(adminRouter);
 
 router.get("/", (req, res) => {
-    res.status(200).send("OK");
+	res.status(200).send("OK");
 });
 
 module.exports = router;

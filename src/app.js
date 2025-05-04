@@ -1,9 +1,9 @@
 const express = require("express");
-const {json} = require("express");
+const { json } = require("express");
 const cookieParser = require("cookie-parser");
 const passport = require("./strategies/jwt-strategy");
-const cors = require("cors")
-const checkEnv = require("./utils/checkEnv")
+const cors = require("cors");
+const checkEnv = require("./utils/checkEnv");
 require("dotenv").config();
 
 const routes = require("./routes/index.js");
@@ -22,8 +22,10 @@ app.use(passport.initialize());
 app.use(routes);
 
 app.use(helmet()); // Add security headers
-app.use(cors({
-    origin: process.env.CORS_ORIGIN || '*',
-    credentials: true
-}));
+app.use(
+	cors({
+		origin: process.env.CORS_ORIGIN || "*",
+		credentials: true,
+	}),
+);
 module.exports = app;
