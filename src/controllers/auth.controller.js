@@ -21,7 +21,7 @@ const login = async (req, res) => {
 		res.cookie("token", token, {
 			httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
 			secure: process.env.NODE_ENV === "production", // Use HTTPS in production
-			sameSite: "strict", // Prevents CSRF attacks
+			sameSite: "lax", // Prevents CSRF attacks
 			maxAge: 3600000, // Cookie expiration time in milliseconds (1 hour)
 		});
 

@@ -1,10 +1,16 @@
-require("dotenv").config();
 const { Strategy: JwtStrategy, ExtractJwt } = require("passport-jwt");
 const prisma = require("../prisma");
 const passport = require("passport");
 
+const cookieExtractor = (req) => {
+	if (req?.cookies) {
+		return req.cookies.token; // Replace 'token' with the name of your cookie
+	}
+	return null;
+};
+
 const opts = {
-	jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+	jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
 	secretOrKey: process.env.JWT_TOKEN_SECRET,
 };
 
@@ -19,7 +25,7 @@ passport.use(
 		} catch (err) {
 			return done(err, false);
 		}
-	}),
+	})
 );
 
 module.exports = passport;

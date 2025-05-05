@@ -4,7 +4,6 @@ const cookieMiddleware = (req, res, next) => {
 		const defaultOptions = {
 			httpOnly: true,
 			secure: process.env.NODE_ENV === "production",
-			sameSite: "lax",
 		};
 		originalCookie(name, value, { ...defaultOptions, ...options });
 	};

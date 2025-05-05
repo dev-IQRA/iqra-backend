@@ -14,7 +14,7 @@ authRouter.post(
 	login,
 );
 
-authRouter.post("/api/auth/logout", (req, res) => {
+authRouter.get("/api/auth/logout", (req, res) => {
 	res.clearCookie("token");
 	return res.status(200).json({ message: "Logged out successfully" });
 });
