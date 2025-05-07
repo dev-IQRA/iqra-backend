@@ -28,8 +28,35 @@ model user {
   phone_number String?
   hash         String?
   role         user_identity_role_enum?
+  nis          String?
+  nip          String?
+  kelas_id     String?
+  is_verified  Boolean                  @default(false)
+  created_at   DateTime                 @default(now())
+  updated_at   DateTime?                @updatedAt
+  kelas        kelas?                   @relation(fields: [kelas_id], references: [id])
+}
 
-  is_verified Boolean   @default(false)
-  created_at  DateTime  @default(now())
-  updated_at  DateTime? @updatedAt
+model kelas {
+  id          String        @id
+  nama_kelas  String?
+  tingkat     Int
+  wali_kelas  String?
+  user        user[]
+  kelas_mapel kelas_mapel[]
+}
+
+model kelas_mapel {
+  id       String @id
+  kelas_id String
+  mapel_id String
+  kelas    kelas  @relation(fields: [kelas_id], references: [id])
+  mapel    mapel  @relation(fields: [mapel_id], references: [id])
+}
+
+model mapel {
+  id          String        @id
+  nama_mapel  String
+  deskripsi   String
+  kelas_mapel kelas_mapel[]
 }
