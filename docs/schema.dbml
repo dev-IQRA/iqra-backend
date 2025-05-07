@@ -21,7 +21,7 @@ Table user {
 
 Table kelas {
   id String [pk]
-  nama_kelas String
+  nama_kelas String [not null]
   tingkat Int [not null]
   wali_kelas String
   user user [not null]

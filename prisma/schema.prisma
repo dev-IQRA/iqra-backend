@@ -44,7 +44,7 @@ model user {
 
 model kelas {
   id          String        @id
-  nama_kelas  String?
+  nama_kelas  String
   tingkat     Int
   wali_kelas  String?
   user        user[]
