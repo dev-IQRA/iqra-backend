@@ -1,0 +1,56 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table user {
+  id String [pk]
+  email String [unique, not null]
+  full_name String [not null]
+  birth_date DateTime
+  phone_number String
+  hash String
+  role user_identity_role_enum
+  nis String
+  nip String
+  kelas_id String
+  is_verified Boolean [not null, default: false]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime
+  kelas kelas
+}
+
+Table kelas {
+  id String [pk]
+  nama_kelas String
+  tingkat Int [not null]
+  wali_kelas String
+  user user [not null]
+  kelas_mapel kelas_mapel [not null]
+}
+
+Table kelas_mapel {
+  id String [pk]
+  kelas_id String [not null]
+  mapel_id String [not null]
+  kelas kelas [not null]
+  mapel mapel [not null]
+}
+
+Table mapel {
+  id String [pk]
+  nama_mapel String [not null]
+  deskripsi String [not null]
+  kelas_mapel kelas_mapel [not null]
+}
+
+Enum user_identity_role_enum {
+  siswa
+  guru
+  admin
+}
+
+Ref: user.kelas_id > kelas.id
+
+Ref: kelas_mapel.kelas_id > kelas.id
+
+Ref: kelas_mapel.mapel_id > mapel.id
