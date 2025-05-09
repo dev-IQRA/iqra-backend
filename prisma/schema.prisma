@@ -23,6 +23,7 @@ enum user_identity_role_enum {
 model user {
   id           String                   @id @default(cuid())
   email        String                   @unique
+  username     String                   @unique
   full_name    String
   birth_date   DateTime?
   phone_number String?
