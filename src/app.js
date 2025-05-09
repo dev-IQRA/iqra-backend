@@ -7,26 +7,28 @@ const checkEnv = require("./utils/checkEnv");
 const cookieMiddleware = require("./middleware/cookieMiddleware");
 require("dotenv").config();
 
-const routes = require("./routes/index.js");
-const helmet = require("helmet");
 const app = express();
 
+//ensure env
 checkEnv();
+
+app.use(cors({
+  origin: process.env.CORS_ORIGIN || "http://localhost:5173", // sesuaikan
+  credentials: true
+}));
+
+const routes = require("./routes/index.js");
+const helmet = require("helmet");
 
 //middlewares
 app.use(json());
 app.use(cookieParser(process.env.SECRET_KEY_SESSION));
 app.use(cookieMiddleware);
-//ensure env
+
 
 app.use(passport.initialize());
 app.use(routes);
 
 app.use(helmet()); // Add security headers
-app.use(
-	cors({
-		origin: process.env.CORS_ORIGIN || "*",
-		credentials: true,
-	}),
-);
+
 module.exports = app;
