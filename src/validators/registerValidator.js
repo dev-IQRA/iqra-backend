@@ -5,6 +5,11 @@ const registerSchema = Joi.object({
 		"string.min": "Name must be at least 2 characters long",
 		"string.max": "Name cannot exceed 100 characters",
 	}),
+	username: Joi.string().alphanum().min(3).max(30).required().messages({
+		"string.alphanum": "Username hanya boleh huruf dan angka",
+		"string.min": "Username minimal 3 karakter",
+		"string.max": "Username maksimal 30 karakter",
+	}),
 	email: Joi.string().email().max(255).required().messages({
 		"string.email": "Please enter a valid email address",
 		"string.max": "Email cannot exceed 255 characters",
