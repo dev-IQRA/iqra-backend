@@ -28,7 +28,6 @@ app.use(cookieMiddleware);
 
 app.use(passport.initialize());
 app.use(routes);
-
 app.use(helmet()); // Add security headers
 
 module.exports = app;
