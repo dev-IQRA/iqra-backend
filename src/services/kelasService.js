@@ -8,8 +8,9 @@ const createKelas = async (data) => {
     })
 };
 
-const findKelasById = async ({id}) => {
-    return prisma.kelas.findUnique({where: {id}});
+const findKelasById = async (id) => {
+    if (!id) throw new Error("ID is required");
+    return prisma.kelas.findUnique({ where: { id } });
 };
 
 const viewAllKelas = async () => {

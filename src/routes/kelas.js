@@ -5,7 +5,8 @@ const {
     authorizeAdmin,
 } = require("../middleware/authMiddleware.js");
 const validateRequest = require("../middleware/validateRequest");
-const { kelasSchema } = require("../validators/authValidator");
+const { kelasSchema } = require("../validators/kelasValidator");
+const { viewKelas } = require("../controllers/kelas.controller");
 const kelasRouter = Router();
 
 kelasRouter.post(
@@ -19,7 +20,7 @@ kelasRouter.post(
 kelasRouter.get(
     "/api/admin/kelas",
     authenticate,
-    //viewKelas,
+    viewKelas,
 );
 
 module.exports = kelasRouter;
