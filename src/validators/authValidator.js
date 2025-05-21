@@ -1,9 +1,11 @@
 const Joi = require("joi");
 
 const loginSchema = Joi.object({
-	email: Joi.string().email().required().messages({
-		"string.email": "Email must be a valid email address.",
-		"any.required": "Email is required.",
+	username: Joi.string().alphanum().min(3).max(30).required().messages({
+		"string.alphanum": "Username hanya boleh huruf dan angka.",
+		"string.min": "Username minimal 3 karakter.",
+		"string.max": "Username maksimal 30 karakter.",
+		"any.required": "Username wajib diisi.",
 	}),
 	password: Joi.string().min(8).required().messages({
 		"string.min": "Password must be at least 8 characters long.",
