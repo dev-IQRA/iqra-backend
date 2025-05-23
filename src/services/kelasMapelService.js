@@ -16,13 +16,8 @@ const getAllKelasMapel = async () => {
 
 const createKelasMapel = async (data) => {
   try {
-    // Pastikan nilai id diberikan secara manual melalui data
-    if (!data.id) {
-      throw new Error("Field 'id' wajib disediakan secara manual.");
-    }
     return await prisma.kelas_mapel.create({
       data: {
-        id: data.id,         // nilai id diambil dari input
         kelas_id: data.kelas_id,
         mapel_id: data.mapel_id
       }
