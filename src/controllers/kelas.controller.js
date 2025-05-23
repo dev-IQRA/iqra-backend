@@ -9,7 +9,10 @@ const createNewKelas = async (req, res) => {
         if (existingKelas) return res.status(409).json({message: "This kelas already existed."});
 
         const result = await createKelas({id, nama_kelas, tingkat});
-        return res.status(200).json({ result });
+        return res.status(201).json({
+            result,
+            uri: `/kelas/${result.id}`
+        });
     } catch (err) {
         handleError(res, err);
     }
@@ -17,7 +20,13 @@ const createNewKelas = async (req, res) => {
 
 const viewKelas = async (req, res) => {
     try {
-        const result = await viewAllKelas();
+        const { page = 1, limit = 10, sortBy = 'nama_kelas', order = 'asc' } = req.query;
+        const result = await viewAllKelas(
+            parseInt(page, 10),
+            parseInt(limit, 10),
+            sortBy,
+            order
+        );
         if (!result || result.kelas.length === 0) {
             return res.status(404).json({ message: "Tidak ada kelas yang terdaftar." });
         }

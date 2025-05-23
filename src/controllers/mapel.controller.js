@@ -29,10 +29,6 @@ const viewMapelById = async (req, res) => {
 const createMapel = async (req, res) => {
     const { id, nama_mapel, deskripsi } = req.body;
 
-    if (!id || !nama_mapel || !deskripsi) {
-        return res.status(400).json({ message: "Invalid input: All fields are required." });
-    }
-
     try {
         const existingMapel = await findMapelById(id);
         if (existingMapel) return res.status(409).json({ message: "This mapel already exists." });

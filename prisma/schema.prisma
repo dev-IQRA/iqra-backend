@@ -39,7 +39,7 @@ model user {
   is_verified  Boolean                  @default(false)
   created_at   DateTime                 @default(now())
   updated_at   DateTime?                @updatedAt
-  kelas        kelas?                   @relation(fields: [kelas_id], references: [id])
+  kelas        kelas?                   @relation(fields: [kelas_id], references: [id], onDelete: SetNull)
 }
 
 model kelas {
@@ -49,14 +49,16 @@ model kelas {
   wali_kelas  String?
   user        user[]
   kelas_mapel kelas_mapel[]
+  created_at  DateTime      @default(now())
+  updated_at  DateTime?     @updatedAt
 }
 
 model kelas_mapel {
   id       String @id
   kelas_id String
   mapel_id String
-  kelas    kelas  @relation(fields: [kelas_id], references: [id])
-  mapel    mapel  @relation(fields: [mapel_id], references: [id])
+  kelas    kelas  @relation(fields: [kelas_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  mapel    mapel  @relation(fields: [mapel_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model mapel {
@@ -64,4 +66,6 @@ model mapel {
   nama_mapel  String
   deskripsi   String
   kelas_mapel kelas_mapel[]
+  created_at  DateTime      @default(now())
+  updated_at  DateTime?     @updatedAt
 }

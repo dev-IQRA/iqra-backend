@@ -20,6 +20,7 @@ kelasRouter.post(
 kelasRouter.get(
     "/api/admin/kelas",
     authenticate,
+    authorizeAdmin,
     viewKelas,
 );
 
