@@ -54,7 +54,7 @@ model kelas {
 }
 
 model kelas_mapel {
-  id       String @id
+  id       String @id @default(uuid())
   kelas_id String
   mapel_id String
   kelas    kelas  @relation(fields: [kelas_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
