@@ -14,6 +14,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+generator dbml {
+  provider = "prisma-dbml-generator"
+  output   = "../docs/"
+}
+
 enum user_identity_role_enum {
   siswa
   guru
@@ -29,8 +34,39 @@ model user {
   phone_number String?
   hash         String?
   role         user_identity_role_enum?
+  nis          String?
+  nip          String?
+  kelas_id     String?
+  is_verified  Boolean                  @default(false)
+  created_at   DateTime                 @default(now())
+  updated_at   DateTime?                @updatedAt
+  kelas        kelas?                   @relation(fields: [kelas_id], references: [id], onDelete: SetNull)
+}
 
-  is_verified Boolean   @default(false)
-  created_at  DateTime  @default(now())
-  updated_at  DateTime? @updatedAt
+model kelas {
+  id          String        @id
+  nama_kelas  String
+  tingkat     Int
+  wali_kelas  String?
+  user        user[]
+  kelas_mapel kelas_mapel[]
+  created_at  DateTime      @default(now())
+  updated_at  DateTime?     @updatedAt
+}
+
+model kelas_mapel {
+  id       String @id @default(uuid())
+  kelas_id String
+  mapel_id String
+  kelas    kelas  @relation(fields: [kelas_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  mapel    mapel  @relation(fields: [mapel_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model mapel {
+  id          String        @id
+  nama_mapel  String
+  deskripsi   String
+  kelas_mapel kelas_mapel[]
+  created_at  DateTime      @default(now())
+  updated_at  DateTime?     @updatedAt
 }
