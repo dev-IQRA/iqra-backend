@@ -26,6 +26,8 @@ Table kelas {
   wali_kelas String
   user user [not null]
   kelas_mapel kelas_mapel [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime
 }
 
 Table kelas_mapel {
@@ -41,6 +43,8 @@ Table mapel {
   nama_mapel String [not null]
   deskripsi String [not null]
   kelas_mapel kelas_mapel [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime
 }
 
 Enum user_identity_role_enum {
@@ -49,8 +53,8 @@ Enum user_identity_role_enum {
   admin
 }
 
-Ref: user.kelas_id > kelas.id
+Ref: user.kelas_id > kelas.id [delete: Set Null]
 
-Ref: kelas_mapel.kelas_id > kelas.id
+Ref: kelas_mapel.kelas_id > kelas.id [delete: Cascade]
 
-Ref: kelas_mapel.mapel_id > mapel.id
+Ref: kelas_mapel.mapel_id > mapel.id [delete: Cascade]

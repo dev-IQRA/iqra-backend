@@ -9,7 +9,7 @@ const mapelSchema = Joi.object({
         "string.max": "Nama Mapel cannot exceed 50 characters.",
         "any.required": "Nama Mapel is required.",
     }),
-    deskripsi: Joi.string().min(10).max(255).required().messages({
+    deskripsi: Joi.string().min(5).max(255).required().messages({
         "string.min": "Deskripsi must be at least 10 characters.",
         "string.max": "Deskripsi cannot exceed 255 characters.",
         "any.required": "Deskripsi is required.",
