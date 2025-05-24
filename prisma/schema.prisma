@@ -37,6 +37,7 @@ model user {
   nis          String?
   nip          String?
   kelas_id     String?
+  jadwal       jadwal[]
   is_verified  Boolean                  @default(false)
   created_at   DateTime                 @default(now())
   updated_at   DateTime?                @updatedAt
@@ -50,6 +51,7 @@ model kelas {
   wali_kelas  String?
   user        user[]
   kelas_mapel kelas_mapel[]
+  jadwal      jadwal[]
   created_at  DateTime      @default(now())
   updated_at  DateTime?     @updatedAt
 }
@@ -67,6 +69,21 @@ model mapel {
   nama_mapel  String
   deskripsi   String
   kelas_mapel kelas_mapel[]
+  jadwal      jadwal[]
   created_at  DateTime      @default(now())
   updated_at  DateTime?     @updatedAt
+}
+
+model jadwal {
+  id          String   @id @default(uuid())
+  kelas_id    String
+  mapel_id    String
+  guru_id     String?         // opsional, jika guru ditetapkan untuk jadwal tertentu
+  hari        String          // misalnya 'Senin', 'Selasa', dll.
+  jam_mulai   DateTime        // waktu mulai
+  jam_selesai DateTime        // waktu selesai
+  kelas       kelas           @relation(fields: [kelas_id], references: [id], onDelete: Cascade)
+  mapel       mapel           @relation(fields: [mapel_id], references: [id], onDelete: Cascade)
+  // Asumsikan model user digunakan untuk guru, jika ada relasi:
+  guru        user?           @relation(fields: [guru_id], references: [id], onDelete: Cascade)
 }
