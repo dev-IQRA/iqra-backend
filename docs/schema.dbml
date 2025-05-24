@@ -5,6 +5,7 @@
 Table user {
   id String [pk]
   email String [unique, not null]
+  username String [unique]
   full_name String [not null]
   birth_date DateTime
   phone_number String
@@ -13,6 +14,7 @@ Table user {
   nis String
   nip String
   kelas_id String
+  jadwal jadwal [not null]
   is_verified Boolean [not null, default: false]
   created_at DateTime [default: `now()`, not null]
   updated_at DateTime
@@ -26,6 +28,7 @@ Table kelas {
   wali_kelas String
   user user [not null]
   kelas_mapel kelas_mapel [not null]
+  jadwal jadwal [not null]
   created_at DateTime [default: `now()`, not null]
   updated_at DateTime
 }
@@ -43,8 +46,22 @@ Table mapel {
   nama_mapel String [not null]
   deskripsi String [not null]
   kelas_mapel kelas_mapel [not null]
+  jadwal jadwal [not null]
   created_at DateTime [default: `now()`, not null]
   updated_at DateTime
+}
+
+Table jadwal {
+  id String [pk]
+  kelas_id String [not null]
+  mapel_id String [not null]
+  guru_id String
+  hari String [not null]
+  jam_mulai DateTime [not null]
+  jam_selesai DateTime [not null]
+  kelas kelas [not null]
+  mapel mapel [not null]
+  guru user
 }
 
 Enum user_identity_role_enum {
@@ -58,3 +75,9 @@ Ref: user.kelas_id > kelas.id [delete: Set Null]
 Ref: kelas_mapel.kelas_id > kelas.id [delete: Cascade]
 
 Ref: kelas_mapel.mapel_id > mapel.id [delete: Cascade]
+
+Ref: jadwal.kelas_id > kelas.id [delete: Cascade]
+
+Ref: jadwal.mapel_id > mapel.id [delete: Cascade]
+
+Ref: jadwal.guru_id > user.id [delete: Cascade]
