@@ -44,7 +44,7 @@ const createJadwal = async (data) => {
 
 const getJadwalById = async (id) => {
   try {
-    return await prisma.jadwal.findUnique({
+    const jadwal = await prisma.jadwal.findUnique({
       where: { id },
       include: {
         kelas: { select: { id: true, nama_kelas: true, tingkat: true } },
@@ -52,6 +52,14 @@ const getJadwalById = async (id) => {
         guru: { select: { id: true, full_name: true } }
       }
     });
+
+    if (!jadwal) return null;
+
+    return {
+      ...jadwal,
+      jam_mulai: formatTo24Hour(jadwal.jam_mulai),
+      jam_selesai: formatTo24Hour(jadwal.jam_selesai)
+    };
   } catch (error) {
     console.error("Error fetching jadwal by ID:", error);
     throw new Error("Failed to fetch jadwal");
@@ -60,9 +68,18 @@ const getJadwalById = async (id) => {
 
 const updateJadwal = async (id, data) => {
   try {
+    // Convert time fields to Date objects if present
+    const updateData = { ...data };
+    if (updateData.jam_mulai) {
+      updateData.jam_mulai = new Date(updateData.jam_mulai);
+    }
+    if (updateData.jam_selesai) {
+      updateData.jam_selesai = new Date(updateData.jam_selesai);
+    }
+
     return await prisma.jadwal.update({
       where: { id },
-      data
+      data: updateData
     });
   } catch (error) {
     console.error("Error updating jadwal:", error);

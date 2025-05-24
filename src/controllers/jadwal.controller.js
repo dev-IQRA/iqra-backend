@@ -15,14 +15,7 @@ const viewAllJadwal = async (req, res) => {
     if (!jadwal || jadwal.length === 0)
       return res.status(404).json({ message: "Tidak ada jadwal ditemukan." });
 
-    // Perbarui pemanggilan fungsi agar menggunakan formatTo24Hour
-    const formattedJadwal = jadwal.map((j) => ({
-      ...j,
-      jam_mulai: formatTo24Hour(j.jam_mulai),
-      jam_selesai: formatTo24Hour(j.jam_selesai)
-    }));
-
-    res.status(200).json({ jadwal: formattedJadwal });
+    res.status(200).json({ jadwal });
   } catch (err) {
     handleError(res, err);
   }
@@ -67,6 +60,21 @@ const getJadwalDetail = async (req, res) => {
 const updateJadwalData = async (req, res) => {
   const { id } = req.params;
   const data = req.body;
+
+  // Validate update data
+  const { error } = jadwalSchema.validate(data);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
+  // Transform time fields if present
+  if (data.jam_mulai) {
+    data.jam_mulai = new Date(data.jam_mulai);
+  }
+  if (data.jam_selesai) {
+    data.jam_selesai = new Date(data.jam_selesai);
+  }
+  
   try {
     const jadwal = await updateJadwal(id, data);
     res.status(200).json({ jadwal });
