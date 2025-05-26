@@ -87,3 +87,12 @@ model jadwal {
   // Asumsikan model user digunakan untuk guru, jika ada relasi:
   guru        user?           @relation(fields: [guru_id], references: [id], onDelete: Cascade)
 }
+
+model Materi {
+  id         String   @id @default(uuid())
+  judul      String
+  deskripsi  String?
+  fileUrl    String?  // Menyimpan path atau URL file yang di-upload
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
