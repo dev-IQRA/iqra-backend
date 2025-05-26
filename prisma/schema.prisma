@@ -42,6 +42,7 @@ model user {
   created_at   DateTime                 @default(now())
   updated_at   DateTime?                @updatedAt
   kelas        kelas?                   @relation(fields: [kelas_id], references: [id], onDelete: SetNull)
+  materi       materi[]
 }
 
 model kelas {
@@ -72,6 +73,7 @@ model mapel {
   jadwal      jadwal[]
   created_at  DateTime      @default(now())
   updated_at  DateTime?     @updatedAt
+  materi       materi[]
 }
 
 model jadwal {
@@ -86,4 +88,19 @@ model jadwal {
   mapel       mapel           @relation(fields: [mapel_id], references: [id], onDelete: Cascade)
   // Asumsikan model user digunakan untuk guru, jika ada relasi:
   guru        user?           @relation(fields: [guru_id], references: [id], onDelete: Cascade)
+}
+
+model materi {
+  id         String   @id @default(uuid())
+  judul      String
+  deskripsi  String?
+  file_url   String?  // Menyimpan path atau URL file yang di-upload
+  created_at DateTime @default(now())
+  updated_at DateTime? @updatedAt
+  // Relasi ke user: guru yang mengupload materi
+  guru_id    String
+  guru       user     @relation(fields: [guru_id], references: [id], onDelete: Cascade)
+  // Relasi ke mapel: subjek materi
+  mapel_id   String
+  mapel      mapel    @relation(fields: [mapel_id], references: [id], onDelete: Cascade)
 }

@@ -5,7 +5,7 @@
 Table user {
   id String [pk]
   email String [unique, not null]
-  username String [unique]
+  username String [unique, not null]
   full_name String [not null]
   birth_date DateTime
   phone_number String
@@ -19,6 +19,7 @@ Table user {
   created_at DateTime [default: `now()`, not null]
   updated_at DateTime
   kelas kelas
+  materi materi [not null]
 }
 
 Table kelas {
@@ -49,6 +50,7 @@ Table mapel {
   jadwal jadwal [not null]
   created_at DateTime [default: `now()`, not null]
   updated_at DateTime
+  materi materi [not null]
 }
 
 Table jadwal {
@@ -62,6 +64,19 @@ Table jadwal {
   kelas kelas [not null]
   mapel mapel [not null]
   guru user
+}
+
+Table materi {
+  id String [pk]
+  judul String [not null]
+  deskripsi String
+  file_url String
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime
+  guru_id String [not null]
+  guru user [not null]
+  mapel_id String [not null]
+  mapel mapel [not null]
 }
 
 Enum user_identity_role_enum {
@@ -81,3 +96,7 @@ Ref: jadwal.kelas_id > kelas.id [delete: Cascade]
 Ref: jadwal.mapel_id > mapel.id [delete: Cascade]
 
 Ref: jadwal.guru_id > user.id [delete: Cascade]
+
+Ref: materi.guru_id > user.id [delete: Cascade]
+
+Ref: materi.mapel_id > mapel.id [delete: Cascade]

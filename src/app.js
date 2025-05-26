@@ -5,6 +5,7 @@ const passport = require("./strategies/jwt-strategy");
 const cors = require("cors");
 const checkEnv = require("./utils/checkEnv");
 const cookieMiddleware = require("./middleware/cookieMiddleware");
+require('./initUploads');
 require("dotenv").config();
 
 const app = express();
@@ -22,6 +23,7 @@ const helmet = require("helmet");
 
 //middlewares
 app.use(json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.SECRET_KEY_SESSION));
 app.use(cookieMiddleware);
 
