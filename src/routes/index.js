@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const { Router } = require("express");
 const authRouter = require("./auth");
 const adminRouter = require("./admin");
@@ -18,8 +19,7 @@ router.use(mapelRouter);
 router.use(kelasMapelRouter);
 router.use(jadwalRouter);
 router.use('/api/materi', materiRoutes);
-router.use('/uploads', express.static('uploads'));
-
+router.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 router.get("/", (req, res) => {
 	res.status(200).send("OK");
