@@ -4,15 +4,28 @@ const prisma = new PrismaClient();
 // Create Materi: Menambahkan materi baru
 exports.createMateri = async (req, res) => {
   try {
-    const { judul, deskripsi } = req.body;
+    // Ambil data dari req.body. Pastikan client juga mengirim 'guru_id' dan 'mapel_id'
+    const { judul, deskripsi, guru_id, mapel_id } = req.body;
+    if (!judul) {
+      return res.status(400).json({ message: "Field 'judul' harus disediakan." });
+    }
+    if (!guru_id) {
+      return res.status(400).json({ message: "Field 'guru_id' harus disediakan." });
+    }
+    if (!mapel_id) {
+      return res.status(400).json({ message: "Field 'mapel_id' harus disediakan." });
+    }
+
     // Ambil lokasi file jika di-upload
-    const fileUrl = req.file ? req.file.path : null;
+    const file_url = req.file ? req.file.path : null;
 
     const newMateri = await prisma.materi.create({
       data: {
         judul,
         deskripsi,
-        fileUrl,
+        file_url,
+        guru_id,    // Relasi ke user (guru)
+        mapel_id,   // Relasi ke mapel (subjek)
       },
     });
     res.status(201).json({ materi: newMateri });
@@ -25,7 +38,12 @@ exports.createMateri = async (req, res) => {
 // Get All Materi: Mengambil semua materi
 exports.getAllMateri = async (req, res) => {
   try {
-    const materiList = await prisma.materi.findMany();
+    const materiList = await prisma.materi.findMany({
+      include: {
+        guru: true,  // Mengikutsertakan data guru (opsional: sesuaikan dengan kebutuhan)
+        mapel: true, // Mengikutsertakan data mapel
+      }
+    });
     res.status(200).json({ materi: materiList });
   } catch (error) {
     console.error("Error fetching materi:", error);
@@ -37,7 +55,13 @@ exports.getAllMateri = async (req, res) => {
 exports.getMateriDetail = async (req, res) => {
   const { id } = req.params;
   try {
-    const materi = await prisma.materi.findUnique({ where: { id } });
+    const materi = await prisma.materi.findUnique({
+      where: { id },
+      include: { 
+        guru: true,
+        mapel: true
+      }
+    });
     if (!materi)
       return res.status(404).json({ message: "Materi tidak ditemukan." });
     res.status(200).json({ materi });
@@ -51,13 +75,14 @@ exports.getMateriDetail = async (req, res) => {
 exports.updateMateri = async (req, res) => {
   const { id } = req.params;
   try {
-    const { judul, deskripsi } = req.body;
-    let fileUrl = req.file ? req.file.path : undefined;
+    // Ambil nilai baru dari req.body (termasuk option update untuk guru_id/mapel_id jika perlu)
+    const { judul, deskripsi, guru_id, mapel_id } = req.body;
+    const file_url = req.file ? req.file.path : undefined;
 
     // Siapkan data yang akan diupdate
-    let data = { judul, deskripsi };
-    if (fileUrl !== undefined) {
-      data.fileUrl = fileUrl;
+    let data = { judul, deskripsi, guru_id, mapel_id };
+    if (file_url !== undefined) {
+      data.file_url = file_url;
     }
     const updatedMateri = await prisma.materi.update({
       where: { id },

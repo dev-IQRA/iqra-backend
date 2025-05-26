@@ -19,6 +19,7 @@ Table user {
   created_at DateTime [default: `now()`, not null]
   updated_at DateTime
   kelas kelas
+  materi materi [not null]
 }
 
 Table kelas {
@@ -49,6 +50,7 @@ Table mapel {
   jadwal jadwal [not null]
   created_at DateTime [default: `now()`, not null]
   updated_at DateTime
+  materi materi [not null]
 }
 
 Table jadwal {
@@ -66,13 +68,15 @@ Table jadwal {
 
 Table materi {
   id String [pk]
-  judul String [not null, note: 'Consider adding index for search performance']
+  judul String [not null]
   deskripsi String
   file_url String
-  created_by String [ref: > user.id] // Link to creator
-  mapel_id String [ref: > mapel.id] // Link to subject
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime
+  guru_id String [not null]
+  guru user [not null]
+  mapel_id String [not null]
+  mapel mapel [not null]
 }
 
 Enum user_identity_role_enum {
@@ -92,3 +96,7 @@ Ref: jadwal.kelas_id > kelas.id [delete: Cascade]
 Ref: jadwal.mapel_id > mapel.id [delete: Cascade]
 
 Ref: jadwal.guru_id > user.id [delete: Cascade]
+
+Ref: materi.guru_id > user.id [delete: Cascade]
+
+Ref: materi.mapel_id > mapel.id [delete: Cascade]
