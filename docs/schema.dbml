@@ -68,7 +68,7 @@ Table materi {
   id String [pk]
   judul String [not null, note: 'Consider adding index for search performance']
   deskripsi String
-  fileUrl String
+  file_url String
   created_by String [ref: > user.id] // Link to creator
   mapel_id String [ref: > mapel.id] // Link to subject
   createdAt DateTime [default: `now()`, not null]
