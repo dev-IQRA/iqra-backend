@@ -5,7 +5,7 @@
 Table user {
   id String [pk]
   email String [unique, not null]
-  username String [unique]
+  username String [unique, not null]
   full_name String [not null]
   birth_date DateTime
   phone_number String
@@ -62,6 +62,15 @@ Table jadwal {
   kelas kelas [not null]
   mapel mapel [not null]
   guru user
+}
+
+Table Materi {
+  id String [pk]
+  judul String [not null]
+  deskripsi String
+  fileUrl String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
 }
 
 Enum user_identity_role_enum {
