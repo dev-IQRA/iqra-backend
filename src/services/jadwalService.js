@@ -157,6 +157,96 @@ const getJadwalHariIni = async (kelasId) => {
   }
 };
 
+const getJadwalByGuru = async (guruId) => {
+  try {
+    const jadwal = await prisma.jadwal.findMany({
+      where: { guru_id: guruId },
+      include: {
+        kelas: { select: { id: true, nama_kelas: true, tingkat: true } },
+        mapel: { select: { id: true, nama_mapel: true, deskripsi: true } },
+        guru: { select: { id: true, full_name: true, email: true } }
+      },
+      orderBy: [
+        { hari: 'asc' },
+        { jam_mulai: 'asc' }
+      ]
+    });
+
+    return jadwal.map(j => ({
+      ...j,
+      jam_mulai: formatTo24Hour(j.jam_mulai),
+      jam_selesai: formatTo24Hour(j.jam_selesai)
+    }));
+
+  } catch (error) {
+    console.error("Error fetching jadwal by guru:", error);
+    throw new Error("Failed to fetch jadwal by guru");
+  }
+};
+
+const getJadwalGuruHariIni = async (guruId) => {
+  try {
+    // Get current day in Indonesian format
+    const today = new Date();
+    const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    const currentDay = days[today.getDay()];
+
+    const jadwal = await prisma.jadwal.findMany({
+      where: { 
+        guru_id: guruId,
+        hari: currentDay
+      },
+      include: {
+        kelas: { select: { id: true, nama_kelas: true, tingkat: true } },
+        mapel: { select: { id: true, nama_mapel: true, deskripsi: true } },
+        guru: { select: { id: true, full_name: true, email: true } }
+      },
+      orderBy: { jam_mulai: 'asc' }
+    });
+
+    return jadwal.map(j => ({
+      ...j,
+      jam_mulai: formatTo24Hour(j.jam_mulai),
+      jam_selesai: formatTo24Hour(j.jam_selesai)
+    }));
+
+  } catch (error) {
+    console.error("Error fetching jadwal guru hari ini:", error);
+    throw new Error("Failed to fetch jadwal guru hari ini");
+  }
+};
+
+const getMapelByGuru = async (guruId) => {
+  try {
+    // Get unique mata pelajaran yang diajar oleh guru
+    const jadwalGuru = await prisma.jadwal.findMany({
+      where: { guru_id: guruId },
+      include: {
+        mapel: { select: { id: true, nama_mapel: true, deskripsi: true } },
+        kelas: { select: { id: true, nama_kelas: true, tingkat: true } }
+      },
+      distinct: ['mapel_id']
+    });
+
+    // Format mapel data for frontend
+    const mapelData = jadwalGuru.map((jadwal) => {
+      return {
+        id: jadwal.mapel.id,
+        code: jadwal.mapel.id,
+        name: jadwal.mapel.nama_mapel,
+        description: jadwal.mapel.deskripsi,
+        color: "#e67e22" // Default color
+      };
+    });
+
+    return mapelData;
+
+  } catch (error) {
+    console.error("Error fetching mapel by guru:", error);
+    throw new Error("Failed to fetch mapel by guru");
+  }
+};
+
 module.exports = {
   getAllJadwal,
   createJadwal,
@@ -164,5 +254,8 @@ module.exports = {
   updateJadwal,
   deleteJadwal,
   getJadwalByKelas,
-  getJadwalHariIni
+  getJadwalHariIni,
+  getJadwalByGuru,
+  getJadwalGuruHariIni,
+  getMapelByGuru
 };
