@@ -1,9 +1,9 @@
 const { Router } = require("express");
-const { login } = require("../controllers/auth.controller");
+const { login, verify, logout } = require("../controllers/auth.controller");
 const { loginSchema } = require("../validators/authValidator");
 const validateRequest = require("../middleware/validateRequest");
 const authLimiter = require("../middleware/rateLimiter");
-const { preventLoginIfLoggedIn } = require("../middleware/authMiddleware");
+const { preventLoginIfLoggedIn, authenticate } = require("../middleware/authMiddleware");
 const authRouter = Router();
 
 authRouter.post(
@@ -14,8 +14,12 @@ authRouter.post(
 	login,
 );
 
-authRouter.get("/api/auth/logout", (req, res) => {
-	res.clearCookie("token");
-	return res.status(200).json({ message: "Logged out successfully" });
-});
+authRouter.get(
+	"/api/auth/verify",
+	authenticate,
+	verify,
+);
+
+authRouter.get("/api/auth/logout", logout);
+
 module.exports = authRouter;

@@ -41,4 +41,36 @@ const login = async (req, res) => {
 	}
 };
 
-module.exports = { login };
+const verify = async (req, res) => {
+	try {
+		// req.user sudah tersedia dari middleware authenticate
+		if (!req.user) {
+			return res.status(401).json({ message: "Token tidak valid" });
+		}
+
+		res.status(200).json({
+			message: "Token valid",
+			user: {
+				id: req.user.id,
+				username: req.user.username,
+				role: req.user.role,
+				email: req.user.email,
+				full_name: req.user.full_name
+			}
+		});
+	} catch (error) {
+		handleError(res, error, 401, "Token tidak valid");
+	}
+};
+
+const logout = async (req, res) => {
+	try {
+		// Clear cookie
+		res.clearCookie("token");
+		res.status(200).json({ message: "Logout berhasil" });
+	} catch (error) {
+		handleError(res, error);
+	}
+};
+
+module.exports = { login, verify, logout };
