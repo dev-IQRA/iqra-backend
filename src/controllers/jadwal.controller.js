@@ -4,10 +4,13 @@ const {
   createJadwal,
   getJadwalById,
   updateJadwal,
-  deleteJadwal
+  deleteJadwal,
+  getJadwalByKelas,
+  getJadwalHariIni
 } = require("../services/jadwalService");
 const { formatTo24Hour } = require("../utils/timeFormatter");
 const handleError = require("../utils/errorHandler");
+const prisma = require("../prisma");
 
 const viewAllJadwal = async (req, res) => {
   try {
@@ -20,7 +23,6 @@ const viewAllJadwal = async (req, res) => {
     handleError(res, err);
   }
 };
-
 
 const addJadwal = async (req, res) => {
   const { error } = jadwalSchema.validate(req.body);
@@ -93,10 +95,68 @@ const deleteJadwalData = async (req, res) => {
   }
 };
 
+const getJadwalSiswa = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    
+    // Get user data with kelas_id
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { kelas_id: true, full_name: true }
+    });
+
+    if (!user || !user.kelas_id) {
+      return res.status(404).json({ 
+        message: "Siswa belum terdaftar di kelas manapun" 
+      });
+    }
+
+    const jadwal = await getJadwalByKelas(user.kelas_id);
+    
+    res.status(200).json({ 
+      jadwal,
+      siswa: user.full_name,
+      kelas_id: user.kelas_id
+    });
+  } catch (err) {
+    handleError(res, err);
+  }
+};
+
+const getJadwalSiswaHariIni = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    
+    // Get user data with kelas_id
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { kelas_id: true, full_name: true }
+    });
+
+    if (!user || !user.kelas_id) {
+      return res.status(404).json({ 
+        message: "Siswa belum terdaftar di kelas manapun" 
+      });
+    }
+
+    const jadwal = await getJadwalHariIni(user.kelas_id);
+    
+    res.status(200).json({ 
+      jadwal,
+      siswa: user.full_name,
+      kelas_id: user.kelas_id
+    });
+  } catch (err) {
+    handleError(res, err);
+  }
+};
+
 module.exports = {
   viewAllJadwal,
   addJadwal,
   getJadwalDetail,
   updateJadwalData,
-  deleteJadwalData
+  deleteJadwalData,
+  getJadwalSiswa,
+  getJadwalSiswaHariIni
 };

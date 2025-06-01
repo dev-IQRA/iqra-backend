@@ -98,10 +98,71 @@ const deleteJadwal = async (id) => {
   }
 };
 
+const getJadwalByKelas = async (kelasId) => {
+  try {
+    const jadwal = await prisma.jadwal.findMany({
+      where: { kelas_id: kelasId },
+      include: {
+        kelas: { select: { id: true, nama_kelas: true, tingkat: true } },
+        mapel: { select: { id: true, nama_mapel: true, deskripsi: true } },
+        guru: { select: { id: true, full_name: true, email: true } }
+      },
+      orderBy: [
+        { hari: 'asc' },
+        { jam_mulai: 'asc' }
+      ]
+    });
+
+    return jadwal.map(j => ({
+      ...j,
+      jam_mulai: formatTo24Hour(j.jam_mulai),
+      jam_selesai: formatTo24Hour(j.jam_selesai)
+    }));
+
+  } catch (error) {
+    console.error("Error fetching jadwal by kelas:", error);
+    throw new Error("Failed to fetch jadwal by kelas");
+  }
+};
+
+const getJadwalHariIni = async (kelasId) => {
+  try {
+    // Get current day in Indonesian format
+    const today = new Date();
+    const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    const currentDay = days[today.getDay()];
+
+    const jadwal = await prisma.jadwal.findMany({
+      where: { 
+        kelas_id: kelasId,
+        hari: currentDay
+      },
+      include: {
+        kelas: { select: { id: true, nama_kelas: true, tingkat: true } },
+        mapel: { select: { id: true, nama_mapel: true, deskripsi: true } },
+        guru: { select: { id: true, full_name: true, email: true } }
+      },
+      orderBy: { jam_mulai: 'asc' }
+    });
+
+    return jadwal.map(j => ({
+      ...j,
+      jam_mulai: formatTo24Hour(j.jam_mulai),
+      jam_selesai: formatTo24Hour(j.jam_selesai)
+    }));
+
+  } catch (error) {
+    console.error("Error fetching jadwal hari ini:", error);
+    throw new Error("Failed to fetch jadwal hari ini");
+  }
+};
+
 module.exports = {
   getAllJadwal,
   createJadwal,
   getJadwalById,
   updateJadwal,
-  deleteJadwal
+  deleteJadwal,
+  getJadwalByKelas,
+  getJadwalHariIni
 };
