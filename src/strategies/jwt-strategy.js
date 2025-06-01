@@ -2,15 +2,28 @@ const { Strategy: JwtStrategy, ExtractJwt } = require("passport-jwt");
 const prisma = require("../prisma");
 const passport = require("passport");
 
-const cookieExtractor = (req) => {
-	if (req?.cookies) {
-		return req.cookies.token; // Replace 'token' with the name of your cookie
+// Custom extractor untuk mengambil token dari cookie atau header
+const customExtractor = (req) => {
+	let token = null;
+	
+	// Cek di header Authorization
+	if (req && req.headers.authorization) {
+		const authHeader = req.headers.authorization;
+		if (authHeader.startsWith('Bearer ')) {
+			token = authHeader.substring(7);
+		}
 	}
-	return null;
+	
+	// Jika tidak ada di header, cek di cookie
+	if (!token && req && req.cookies) {
+		token = req.cookies.token;
+	}
+	
+	return token;
 };
 
 const opts = {
-	jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
+	jwtFromRequest: customExtractor,
 	secretOrKey: process.env.JWT_TOKEN_SECRET,
 };
 
