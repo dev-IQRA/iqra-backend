@@ -6,7 +6,10 @@ const {
   updateJadwal,
   deleteJadwal,
   getJadwalByKelas,
-  getJadwalHariIni
+  getJadwalHariIni,
+  getJadwalByGuru,
+  getJadwalGuruHariIni,
+  getMapelByGuru
 } = require("../services/jadwalService");
 const { formatTo24Hour } = require("../utils/timeFormatter");
 const handleError = require("../utils/errorHandler");
@@ -151,6 +154,90 @@ const getJadwalSiswaHariIni = async (req, res) => {
   }
 };
 
+const getJadwalGuru = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    
+    // Get user data to verify role
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, full_name: true, role: true }
+    });
+
+    if (!user || user.role !== 'guru') {
+      return res.status(403).json({ 
+        message: "Akses ditolak. Hanya guru yang dapat mengakses jadwal mengajar." 
+      });
+    }
+
+    const jadwal = await getJadwalByGuru(user.id);
+    
+    res.status(200).json({ 
+      jadwal,
+      guru: user.full_name,
+      guru_id: user.id
+    });
+  } catch (err) {
+    handleError(res, err);
+  }
+};
+
+const getJadwalGuruHariIniController = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    
+    // Get user data to verify role
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, full_name: true, role: true }
+    });
+
+    if (!user || user.role !== 'guru') {
+      return res.status(403).json({ 
+        message: "Akses ditolak. Hanya guru yang dapat mengakses jadwal mengajar." 
+      });
+    }
+
+    const jadwal = await getJadwalGuruHariIni(user.id);
+    
+    res.status(200).json({ 
+      jadwal,
+      guru: user.full_name,
+      guru_id: user.id
+    });
+  } catch (err) {
+    handleError(res, err);
+  }
+};
+
+const getMapelGuru = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    
+    // Get user data to verify role
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, full_name: true, role: true }
+    });
+
+    if (!user || user.role !== 'guru') {
+      return res.status(403).json({ 
+        message: "Akses ditolak. Hanya guru yang dapat mengakses mata pelajaran." 
+      });
+    }
+
+    const mapel = await getMapelByGuru(user.id);
+    
+    res.status(200).json({ 
+      mapel,
+      guru: user.full_name,
+      guru_id: user.id
+    });
+  } catch (err) {
+    handleError(res, err);
+  }
+};
+
 module.exports = {
   viewAllJadwal,
   addJadwal,
@@ -158,5 +245,8 @@ module.exports = {
   updateJadwalData,
   deleteJadwalData,
   getJadwalSiswa,
-  getJadwalSiswaHariIni
+  getJadwalSiswaHariIni,
+  getJadwalGuru,
+  getJadwalGuruHariIni: getJadwalGuruHariIniController,
+  getMapelGuru
 };

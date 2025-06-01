@@ -6,7 +6,10 @@ const {
   updateJadwalData,
   deleteJadwalData,
   getJadwalSiswa,
-  getJadwalSiswaHariIni
+  getJadwalSiswaHariIni,
+  getJadwalGuru,
+  getJadwalGuruHariIni,
+  getMapelGuru
 } = require("../controllers/jadwal.controller");
 const { authenticate } = require("../middleware/authMiddleware");
 
@@ -17,6 +20,9 @@ jadwalRouter.get("/api/jadwal", viewAllJadwal);
 jadwalRouter.post("/api/jadwal", addJadwal);
 jadwalRouter.get("/api/jadwal/siswa", authenticate, getJadwalSiswa);
 jadwalRouter.get("/api/jadwal/siswa/hari-ini", authenticate, getJadwalSiswaHariIni);
+jadwalRouter.get("/api/jadwal/guru", authenticate, getJadwalGuru);
+jadwalRouter.get("/api/jadwal/guru/hari-ini", authenticate, getJadwalGuruHariIni);
+jadwalRouter.get("/api/jadwal/guru/mapel", authenticate, getMapelGuru);
 jadwalRouter.get("/api/jadwal/:id", getJadwalDetail);
 jadwalRouter.put("/api/jadwal/:id", updateJadwalData);
 jadwalRouter.delete("/api/jadwal/:id", deleteJadwalData);
