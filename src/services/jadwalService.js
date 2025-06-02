@@ -253,20 +253,18 @@ const getJadwalGuruHariIni = async (guruId) => {
 
 const getMapelByGuru = async (guruId) => {
 	try {
-		// Get unique mata pelajaran yang diajar oleh guru
 		const jadwalGuru = await prisma.jadwal.findMany({
-			where: { guru_id: guruId },
+			where: {guru_id: guruId},
 			include: {
 				mapel: {
-					select: { id: true, nama_mapel: true, deskripsi: true },
+					select: {id: true, nama_mapel: true, deskripsi: true},
 				},
 				kelas: {
-					select: { id: true, nama_kelas: true, tingkat: true },
-				},
+					select: { id:true, nama_kelas: true, tingkat: true}
+				}
 			},
-			distinct: ["mapel_id"],
-		});
-
+			distinct: "mapel_id"
+		})
 		// Format mapel data for frontend
 		const mapelData = jadwalGuru.map((jadwal) => {
 			return {
