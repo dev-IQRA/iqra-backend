@@ -7,7 +7,7 @@ const customExtractor = (req) => {
 	let token = null;
 
 	// Cek di header Authorization
-	if (req && req.headers.authorization) {
+	if (req?.headers.authorization) {
 		const authHeader = req.headers.authorization;
 		if (authHeader.startsWith("Bearer ")) {
 			token = authHeader.substring(7);
