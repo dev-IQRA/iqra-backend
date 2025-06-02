@@ -9,9 +9,11 @@ require("dotenv").config();
 
 const routes = require("./routes/index.js");
 const helmet = require("helmet");
+const {testDb} = require("./utils/dbtest");
 const app = express();
 
 checkEnv();
+testDb();
 
 //middlewares
 app.use(json());
@@ -29,4 +31,5 @@ app.use(
 		credentials: true,
 	}),
 );
+
 module.exports = app;
