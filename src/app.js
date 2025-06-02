@@ -5,6 +5,7 @@ const passport = require("./strategies/jwt-strategy");
 const cors = require("cors");
 const checkEnv = require("./utils/checkEnv");
 const cookieMiddleware = require("./middleware/cookieMiddleware");
+const {testDbConnection} = require("./utils/dbTest")
 require('./initUploads');
 require("dotenv").config();
 
@@ -12,6 +13,7 @@ const app = express();
 
 //ensure env
 checkEnv();
+testDbConnection();
 
 app.use(cors({
   origin: process.env.CORS_ORIGIN || "http://localhost:5173", // sesuaikan

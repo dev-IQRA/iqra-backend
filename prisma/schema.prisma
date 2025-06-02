@@ -9,14 +9,14 @@ generator client {
   output   = "app/generated/prisma/client"
 }
 
+generator dbml {
+  provider = "prisma-dbml-generator"
+  output   = "../docs"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-
-generator dbml {
-  provider = "prisma-dbml-generator"
-  output   = "../docs/"
 }
 
 enum user_identity_role_enum {
@@ -26,25 +26,25 @@ enum user_identity_role_enum {
 }
 
 model user {
-  id           String                   @id @default(cuid())
-  email        String                   @unique
-  username     String                   @unique
-  full_name    String
-  birth_date   DateTime?
-  phone_number String?
-  hash         String?
-  role         user_identity_role_enum?
-  nis          String?
-  nip          String?
-  kelas_id     String?
-  jadwal       jadwal[]
-  is_verified  Boolean                  @default(false)
-  is_online    Boolean                  @default(false)
+  id            String                   @id @default(cuid())
+  email         String                   @unique
+  username      String                   @unique
+  full_name     String
+  birth_date    DateTime?
+  phone_number  String?
+  hash          String?
+  role          user_identity_role_enum?
+  nis           String?
+  nip           String?
+  kelas_id      String?
+  jadwal        jadwal[]
+  is_verified   Boolean                  @default(false)
+  is_online     Boolean                  @default(false)
   last_activity DateTime?
-  created_at   DateTime                 @default(now())
-  updated_at   DateTime?                @updatedAt
-  kelas        kelas?                   @relation(fields: [kelas_id], references: [id], onDelete: SetNull)
-  materi       materi[]
+  created_at    DateTime                 @default(now())
+  updated_at    DateTime?                @updatedAt
+  kelas         kelas?                   @relation(fields: [kelas_id], references: [id], onDelete: SetNull)
+  materi        materi[]
 }
 
 model kelas {
@@ -75,34 +75,34 @@ model mapel {
   jadwal      jadwal[]
   created_at  DateTime      @default(now())
   updated_at  DateTime?     @updatedAt
-  materi       materi[]
+  materi      materi[]
 }
 
 model jadwal {
   id          String   @id @default(uuid())
   kelas_id    String
   mapel_id    String
-  guru_id     String?         // opsional, jika guru ditetapkan untuk jadwal tertentu
-  hari        String          // misalnya 'Senin', 'Selasa', dll.
-  jam_mulai   DateTime        // waktu mulai
-  jam_selesai DateTime        // waktu selesai
-  kelas       kelas           @relation(fields: [kelas_id], references: [id], onDelete: Cascade)
-  mapel       mapel           @relation(fields: [mapel_id], references: [id], onDelete: Cascade)
+  guru_id     String? // opsional, jika guru ditetapkan untuk jadwal tertentu
+  hari        String // misalnya 'Senin', 'Selasa', dll.
+  jam_mulai   DateTime // waktu mulai
+  jam_selesai DateTime // waktu selesai
+  kelas       kelas    @relation(fields: [kelas_id], references: [id], onDelete: Cascade)
+  mapel       mapel    @relation(fields: [mapel_id], references: [id], onDelete: Cascade)
   // Asumsikan model user digunakan untuk guru, jika ada relasi:
-  guru        user?           @relation(fields: [guru_id], references: [id], onDelete: Cascade)
+  guru        user?    @relation(fields: [guru_id], references: [id], onDelete: Cascade)
 }
 
 model materi {
-  id         String   @id @default(uuid())
+  id         String    @id @default(uuid())
   judul      String
   deskripsi  String?
-  file_url   String?  // Menyimpan path atau URL file yang di-upload
-  created_at DateTime @default(now())
+  file_url   String? // Menyimpan path atau URL file yang di-upload
+  created_at DateTime  @default(now())
   updated_at DateTime? @updatedAt
   // Relasi ke user: guru yang mengupload materi
   guru_id    String
-  guru       user     @relation(fields: [guru_id], references: [id], onDelete: Cascade)
+  guru       user      @relation(fields: [guru_id], references: [id], onDelete: Cascade)
   // Relasi ke mapel: subjek materi
   mapel_id   String
-  mapel      mapel    @relation(fields: [mapel_id], references: [id], onDelete: Cascade)
+  mapel      mapel     @relation(fields: [mapel_id], references: [id], onDelete: Cascade)
 }

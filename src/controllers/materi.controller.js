@@ -1,5 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require("../prisma")
 
 // Create Materi: Menambahkan materi baru
 exports.createMateri = async (req, res) => {
