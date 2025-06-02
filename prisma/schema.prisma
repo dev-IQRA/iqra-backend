@@ -39,6 +39,8 @@ model user {
   kelas_id     String?
   jadwal       jadwal[]
   is_verified  Boolean                  @default(false)
+  is_online    Boolean                  @default(false)
+  last_activity DateTime?
   created_at   DateTime                 @default(now())
   updated_at   DateTime?                @updatedAt
   kelas        kelas?                   @relation(fields: [kelas_id], references: [id], onDelete: SetNull)

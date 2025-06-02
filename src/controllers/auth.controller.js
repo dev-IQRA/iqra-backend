@@ -1,16 +1,19 @@
 const jwt = require("jsonwebtoken");
-const { findUserByUsername } = require("../services/userService");
+const { findUserByUsername, updateUserOnlineStatus } = require("../services/userService");
 const { verifyPassword } = require("../utils/passwordUtils");
 const handleError = require("../utils/errorHandler");
 
 const login = async (req, res) => {
 	const { username, password } = req.body;
-
 	try {
 		const user = await findUserByUsername(username);
 		if (!user || !(await verifyPassword(user.hash, password))) {
 			return res.status(401).json({ message: "Invalid credentials" });
 		}
+		// Set user online saat login
+		console.log(`Setting user ${user.username} (ID: ${user.id}) online...`);
+		await updateUserOnlineStatus(user.id, true);
+		console.log(`User ${user.username} is now online`);
 
 		const token = jwt.sign(
 			{ id: user.id, username: user.username, role: user.role },
@@ -65,6 +68,11 @@ const verify = async (req, res) => {
 
 const logout = async (req, res) => {
 	try {
+		// Set user offline saat logout jika ada user info
+		if (req.user && req.user.id) {
+			await updateUserOnlineStatus(req.user.id, false);
+		}
+		
 		// Clear cookie
 		res.clearCookie("token");
 		res.status(200).json({ message: "Logout berhasil" });
