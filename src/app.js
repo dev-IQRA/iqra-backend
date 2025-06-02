@@ -5,8 +5,8 @@ const passport = require("./strategies/jwt-strategy");
 const cors = require("cors");
 const checkEnv = require("./utils/checkEnv");
 const cookieMiddleware = require("./middleware/cookieMiddleware");
-const {testDbConnection} = require("./utils/dbTest")
-require('./initUploads');
+const { testDbConnection } = require("./utils/dbTest");
+require("./initUploads");
 require("dotenv").config();
 
 const app = express();
@@ -15,10 +15,12 @@ const app = express();
 checkEnv();
 testDbConnection();
 
-app.use(cors({
-  origin: process.env.CORS_ORIGIN || "http://localhost:5173", // sesuaikan
-  credentials: true
-}));
+app.use(
+	cors({
+		origin: process.env.CORS_ORIGIN || "http://localhost:5173", // sesuaikan
+		credentials: true,
+	}),
+);
 
 const routes = require("./routes/index.js");
 const helmet = require("helmet");
@@ -28,7 +30,6 @@ app.use(json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.SECRET_KEY_SESSION));
 app.use(cookieMiddleware);
-
 
 app.use(passport.initialize());
 app.use(routes);

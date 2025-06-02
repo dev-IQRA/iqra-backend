@@ -20,8 +20,8 @@ const getAllUsers = async () => {
 			role: true,
 			is_verified: true,
 			created_at: true,
-			updated_at: true
-		}
+			updated_at: true,
+		},
 	});
 };
 
@@ -36,24 +36,24 @@ const updateUserStatus = async (userId, isVerified) => {
 			email: true,
 			role: true,
 			is_verified: true,
-			updated_at: true
-		}
+			updated_at: true,
+		},
 	});
 };
 
 const deleteUser = async (userId) => {
 	return prisma.user.delete({
-		where: { id: userId }
+		where: { id: userId },
 	});
 };
 
 const updateUserOnlineStatus = async (userId, isOnline) => {
 	return prisma.user.update({
 		where: { id: userId },
-		data: { 
+		data: {
 			is_online: isOnline,
-			last_activity: new Date()
-		}
+			last_activity: new Date(),
+		},
 	});
 };
 
@@ -61,7 +61,7 @@ const getOnlineUsers = async () => {
 	// Ambil users yang benar-benar online (hapus filter is_verified untuk sementara)
 	return prisma.user.findMany({
 		where: {
-			is_online: true
+			is_online: true,
 		},
 		select: {
 			id: true,
@@ -71,12 +71,12 @@ const getOnlineUsers = async () => {
 			nis: true,
 			nip: true,
 			last_activity: true,
-			updated_at: true
+			updated_at: true,
 		},
 		orderBy: {
-			last_activity: 'desc'
+			last_activity: "desc",
 		},
-		take: 15 // Batasi 15 user online
+		take: 15, // Batasi 15 user online
 	});
 };
 
@@ -84,18 +84,27 @@ const getOnlineUsers = async () => {
 const cleanupInactiveUsers = async () => {
 	const fifteenMinutesAgo = new Date();
 	fifteenMinutesAgo.setMinutes(fifteenMinutesAgo.getMinutes() - 15);
-	
+
 	return prisma.user.updateMany({
 		where: {
 			is_online: true,
 			last_activity: {
-				lt: fifteenMinutesAgo
-			}
+				lt: fifteenMinutesAgo,
+			},
 		},
 		data: {
-			is_online: false
-		}
+			is_online: false,
+		},
 	});
 };
 
-module.exports = { findUserByUsername, createUser, getAllUsers, updateUserStatus, deleteUser, getOnlineUsers, updateUserOnlineStatus, cleanupInactiveUsers };
+module.exports = {
+	findUserByUsername,
+	createUser,
+	getAllUsers,
+	updateUserStatus,
+	deleteUser,
+	getOnlineUsers,
+	updateUserOnlineStatus,
+	cleanupInactiveUsers,
+};
