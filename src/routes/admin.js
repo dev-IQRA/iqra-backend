@@ -1,5 +1,11 @@
 const { Router } = require("express");
-const { registerUser, getUsers, updateUser, removeUser, getOnlineUsersList } = require("../controllers/admin.controller");
+const {
+	registerUser,
+	getUsers,
+	updateUser,
+	removeUser,
+	getOnlineUsersList,
+} = require("../controllers/admin.controller");
 const {
 	authenticate,
 	authorizeAdmin,

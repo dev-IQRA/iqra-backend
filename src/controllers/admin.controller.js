@@ -1,4 +1,13 @@
-const { findUserByEmail, createUser, findUserByUsername, getAllUsers, updateUserStatus, deleteUser, getOnlineUsers, cleanupInactiveUsers } = require("../services/userService");
+const {
+	findUserByEmail,
+	createUser,
+	findUserByUsername,
+	getAllUsers,
+	updateUserStatus,
+	deleteUser,
+	getOnlineUsers,
+	cleanupInactiveUsers,
+} = require("../services/userService");
 const { hashPassword } = require("../utils/passwordUtils");
 const handleError = require("../utils/errorHandler");
 
@@ -12,7 +21,13 @@ const registerUser = async (req, res) => {
 		}
 
 		const hash = await hashPassword(password);
-		const newUser = await createUser({ full_name, email, username, hash, role });
+		const newUser = await createUser({
+			full_name,
+			email,
+			username,
+			hash,
+			role,
+		});
 
 		res.status(201).json({
 			message: "User registered successfully",
@@ -68,9 +83,12 @@ const getOnlineUsersList = async (req, res) => {
 		console.log("Getting online users list...");
 		// Cleanup inactive users terlebih dahulu
 		await cleanupInactiveUsers();
-		
+
 		const onlineUsers = await getOnlineUsers();
-		console.log(`Found ${onlineUsers.length} online users:`, onlineUsers.map(u => u.username));
+		console.log(
+			`Found ${onlineUsers.length} online users:`,
+			onlineUsers.map((u) => u.username),
+		);
 		res.status(200).json({
 			message: "Online users retrieved successfully",
 			users: onlineUsers,
@@ -81,4 +99,10 @@ const getOnlineUsersList = async (req, res) => {
 	}
 };
 
-module.exports = { registerUser, getUsers, updateUser, removeUser, getOnlineUsersList };
+module.exports = {
+	registerUser,
+	getUsers,
+	updateUser,
+	removeUser,
+	getOnlineUsersList,
+};

@@ -5,20 +5,20 @@ const passport = require("passport");
 // Custom extractor untuk mengambil token dari cookie atau header
 const customExtractor = (req) => {
 	let token = null;
-	
+
 	// Cek di header Authorization
 	if (req && req.headers.authorization) {
 		const authHeader = req.headers.authorization;
-		if (authHeader.startsWith('Bearer ')) {
+		if (authHeader.startsWith("Bearer ")) {
 			token = authHeader.substring(7);
 		}
 	}
-	
+
 	// Jika tidak ada di header, cek di cookie
 	if (!token && req && req.cookies) {
 		token = req.cookies.token;
 	}
-	
+
 	return token;
 };
 
@@ -38,7 +38,7 @@ passport.use(
 		} catch (err) {
 			return done(err, false);
 		}
-	})
+	}),
 );
 
 module.exports = passport;

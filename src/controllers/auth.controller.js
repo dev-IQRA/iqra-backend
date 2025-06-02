@@ -1,5 +1,8 @@
 const jwt = require("jsonwebtoken");
-const { findUserByUsername, updateUserOnlineStatus } = require("../services/userService");
+const {
+	findUserByUsername,
+	updateUserOnlineStatus,
+} = require("../services/userService");
 const { verifyPassword } = require("../utils/passwordUtils");
 const handleError = require("../utils/errorHandler");
 
@@ -18,14 +21,14 @@ const login = async (req, res) => {
 		const token = jwt.sign(
 			{ id: user.id, username: user.username, role: user.role },
 			process.env.JWT_TOKEN_SECRET,
-			{ expiresIn: "24h" }
+			{ expiresIn: "24h" },
 		);
 
 		res.cookie("token", token, {
 			httpOnly: true,
 			secure: process.env.NODE_ENV === "production",
 			sameSite: "lax",
-			maxAge: 3600000
+			maxAge: 3600000,
 		});
 
 		return res.status(200).json({
@@ -35,9 +38,9 @@ const login = async (req, res) => {
 				username: user.username,
 				role: user.role,
 				email: user.email,
-				full_name: user.full_name
+				full_name: user.full_name,
 			},
-			token
+			token,
 		});
 	} catch (error) {
 		handleError(res, error);
@@ -58,8 +61,8 @@ const verify = async (req, res) => {
 				username: req.user.username,
 				role: req.user.role,
 				email: req.user.email,
-				full_name: req.user.full_name
-			}
+				full_name: req.user.full_name,
+			},
 		});
 	} catch (error) {
 		handleError(res, error, 401, "Token tidak valid");
@@ -69,10 +72,10 @@ const verify = async (req, res) => {
 const logout = async (req, res) => {
 	try {
 		// Set user offline saat logout jika ada user info
-		if (req.user && req.user.id) {
+		if (req.user?.id) {
 			await updateUserOnlineStatus(req.user.id, false);
 		}
-		
+
 		// Clear cookie
 		res.clearCookie("token");
 		res.status(200).json({ message: "Logout berhasil" });
