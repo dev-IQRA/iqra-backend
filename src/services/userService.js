@@ -47,4 +47,55 @@ const deleteUser = async (userId) => {
 	});
 };
 
-module.exports = { findUserByUsername, createUser, getAllUsers, updateUserStatus, deleteUser };
+const updateUserOnlineStatus = async (userId, isOnline) => {
+	return prisma.user.update({
+		where: { id: userId },
+		data: { 
+			is_online: isOnline,
+			last_activity: new Date()
+		}
+	});
+};
+
+const getOnlineUsers = async () => {
+	// Ambil users yang benar-benar online (hapus filter is_verified untuk sementara)
+	return prisma.user.findMany({
+		where: {
+			is_online: true
+		},
+		select: {
+			id: true,
+			username: true,
+			full_name: true,
+			role: true,
+			nis: true,
+			nip: true,
+			last_activity: true,
+			updated_at: true
+		},
+		orderBy: {
+			last_activity: 'desc'
+		},
+		take: 15 // Batasi 15 user online
+	});
+};
+
+// Fungsi untuk cleanup user yang sudah tidak aktif (offline otomatis setelah 15 menit)
+const cleanupInactiveUsers = async () => {
+	const fifteenMinutesAgo = new Date();
+	fifteenMinutesAgo.setMinutes(fifteenMinutesAgo.getMinutes() - 15);
+	
+	return prisma.user.updateMany({
+		where: {
+			is_online: true,
+			last_activity: {
+				lt: fifteenMinutesAgo
+			}
+		},
+		data: {
+			is_online: false
+		}
+	});
+};
+
+module.exports = { findUserByUsername, createUser, getAllUsers, updateUserStatus, deleteUser, getOnlineUsers, updateUserOnlineStatus, cleanupInactiveUsers };

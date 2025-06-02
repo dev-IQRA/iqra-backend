@@ -2,11 +2,10 @@
   "name": "iqra-backend",
   "version": "0.0.0",
   "private": true,
-  "main": "./src/server.js",
-  "scripts": {
+  "main": "./src/server.js",  "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/server.mjs",
-    "serve": "node src/server.mjs",
+    "dev": "nodemon src/server.js",
+    "serve": "node src/server.js",
     "format": "biome format --write src/",
     "fix": "biome lint --write ./src",
     "migrate": "prisma migrate deploy",

@@ -16,6 +16,8 @@ Table user {
   kelas_id String
   jadwal jadwal [not null]
   is_verified Boolean [not null, default: false]
+  is_online Boolean [not null, default: false]
+  last_activity DateTime
   created_at DateTime [default: `now()`, not null]
   updated_at DateTime
   kelas kelas

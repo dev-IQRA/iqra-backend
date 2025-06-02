@@ -4,6 +4,7 @@ const { loginSchema } = require("../validators/authValidator");
 const validateRequest = require("../middleware/validateRequest");
 const authLimiter = require("../middleware/rateLimiter");
 const { preventLoginIfLoggedIn, authenticate } = require("../middleware/authMiddleware");
+const { updateLastActivity } = require("../middleware/activityMiddleware");
 const authRouter = Router();
 
 authRouter.post(
@@ -17,9 +18,10 @@ authRouter.post(
 authRouter.get(
 	"/api/auth/verify",
 	authenticate,
+	updateLastActivity,
 	verify,
 );
 
-authRouter.get("/api/auth/logout", logout);
+authRouter.get("/api/auth/logout", authenticate, logout);
 
 module.exports = authRouter;
