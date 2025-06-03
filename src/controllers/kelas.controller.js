@@ -168,7 +168,6 @@ module.exports = {
 	viewKelas,
 	createNewKelas,
 	createNewKelasMany,
-	assignSiswaToKelas
+	assignSiswaToKelas,
+	assignSiswaToKelasBatch
 };
-
-module.exports = { viewKelasById, viewKelas, createNewKelas, createNewKelasMany, assignSiswaToKelasBatch };
