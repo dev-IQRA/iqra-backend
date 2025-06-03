@@ -1,3 +1,9 @@
+# Anggota
+- Aldi Pramudya - G6401231003 - Backend
+- Muhammad Fauzan Akbar - G6401231045 - Backend
+- Cokorda Gd. Satria Widnyana Putra - G6401231064 - Frontend
+- Johanna Davina Habeahan - G6401231087 - UX/UI
+- Ghanianda Wafiqarifah -  G6401231126 - Frontend
 # IQRA
 
 A Node.js-based application for managing students authentication, registration, and role-based access control using Express, Prisma, and JWT.
