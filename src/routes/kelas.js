@@ -1,13 +1,18 @@
-const { Router } = require("express");
-const { createNewKelas, createNewKelasMany, assignSiswaToKelas, assignSiswaToKelasBatch} = require("../controllers/kelas.controller");
+const {Router} = require("express");
+const {
+	createNewKelas,
+	createNewKelasMany,
+	assignSiswaToKelas,
+	assignSiswaToKelasBatch,
+	viewKelas,
+} = require("../controllers/kelas.controller");
 const {
 	authenticate,
 	authorizeAdmin,
-} = require("../middleware/authMiddleware.js");
-const { updateLastActivity } = require("../middleware/activityMiddleware.js");
+} = require("../middleware/authMiddleware");
+const {updateLastActivity} = require("../middleware/activityMiddleware");
 const validateRequest = require("../middleware/validateRequest");
-const { kelasSchema } = require("../validators/kelasValidator");
-const { viewKelas } = require("../controllers/kelas.controller");
+const {kelasSchema} = require("../validators/kelasValidator");
 const kelasRouter = Router();
 
 kelasRouter.post(
