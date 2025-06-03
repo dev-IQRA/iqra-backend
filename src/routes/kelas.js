@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { createNewKelas } = require("../controllers/kelas.controller");
+const { createNewKelas, createNewKelasMany, assignSiswaToKelas, assignSiswaToKelasBatch} = require("../controllers/kelas.controller");
 const {
 	authenticate,
 	authorizeAdmin,
@@ -19,6 +19,14 @@ kelasRouter.post(
 	createNewKelas,
 );
 
+kelasRouter.post(
+	"/api/admin/kelas-many",
+	authenticate,
+	updateLastActivity,
+	authorizeAdmin,
+	createNewKelasMany,
+);
+
 kelasRouter.get(
 	"/api/admin/kelas",
 	authenticate,
@@ -27,4 +35,19 @@ kelasRouter.get(
 	viewKelas,
 );
 
+kelasRouter.get(
+	"/api/admin/kelas/assign",
+	authenticate,
+	updateLastActivity,
+	authorizeAdmin,
+	assignSiswaToKelas,
+);
+
+kelasRouter.get(
+	"/api/admin/kelas/assign-batch",
+	authenticate,
+	updateLastActivity,
+	authorizeAdmin,
+	assignSiswaToKelasBatch,
+);
 module.exports = kelasRouter;

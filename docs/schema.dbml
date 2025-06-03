@@ -81,6 +81,12 @@ Table materi {
   mapel mapel [not null]
 }
 
+Table announcement {
+  id String [pk]
+  title String [not null]
+  body String [not null]
+}
+
 Enum user_identity_role_enum {
   siswa
   guru

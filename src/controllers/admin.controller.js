@@ -38,6 +38,42 @@ const registerUser = async (req, res) => {
 	}
 };
 
+const registerUserBatch = async (req, res) => {
+	const usersArray = Array.isArray(req.body) ? req.body : [req.body];
+
+	try {
+		const results = [];
+		for (const userData of usersArray) {
+			const { full_name, email, username, password, role } = userData;
+			const existingUser = await findUserByUsername(username);
+			if (existingUser) {
+				results.push({
+					username,
+					status: "failed",
+					message: "User already exists",
+				});
+				continue;
+			}
+			const hash = await hashPassword(password);
+			const newUser = await createUser({
+				full_name,
+				email,
+				username,
+				hash,
+				role,
+			});
+			results.push({
+				username: newUser.username,
+				status: "success",
+				user: newUser,
+			});
+		}
+		res.status(201).json({ results });
+	} catch (error) {
+		handleError(res, error);
+	}
+};
+
 const getUsers = async (req, res) => {
 	try {
 		const users = await getAllUsers();
@@ -105,4 +141,5 @@ module.exports = {
 	updateUser,
 	removeUser,
 	getOnlineUsersList,
+	registeruserBatch: registerUserBatch,
 };

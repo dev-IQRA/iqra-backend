@@ -4,7 +4,7 @@ const {
 	getUsers,
 	updateUser,
 	removeUser,
-	getOnlineUsersList,
+	getOnlineUsersList, registeruserBatch,
 } = require("../controllers/admin.controller");
 const {
 	authenticate,
@@ -21,6 +21,13 @@ adminRouter.post(
 	authorizeAdmin,
 	validateRequest(registerSchema),
 	registerUser,
+);
+
+adminRouter.post(
+	"/api/admin/register-batch",
+	authenticate,
+	authorizeAdmin,
+	registeruserBatch,
 );
 
 adminRouter.get(
