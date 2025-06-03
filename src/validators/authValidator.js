@@ -1,8 +1,7 @@
 const Joi = require("joi");
 
 const loginSchema = Joi.object({
-	username: Joi.string().alphanum().min(3).max(30).required().messages({
-		"string.alphanum": "Username hanya boleh huruf dan angka.",
+	username: Joi.string().min(3).max(30).required().messages({
 		"string.min": "Username minimal 3 karakter.",
 		"string.max": "Username maksimal 30 karakter.",
 		"any.required": "Username wajib diisi.",
