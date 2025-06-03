@@ -14,7 +14,7 @@ const { mapelSchema } = require("../validators/mapelValidator");
 
 const mapelRouter = Router();
 
-// 🔹 Endpoint untuk melihat semua mata pelajaran
+// Endpoint untuk melihat semua mata pelajaran
 mapelRouter.get(
 	"/api/admin/mapel",
 	authenticate,
@@ -22,7 +22,7 @@ mapelRouter.get(
 	viewAllMapel,
 );
 
-// 🔹 Endpoint untuk melihat mata pelajaran berdasarkan ID
+// Endpoint untuk melihat mata pelajaran berdasarkan ID
 mapelRouter.get(
 	"/api/admin/mapel/:id",
 	authenticate,
@@ -30,7 +30,7 @@ mapelRouter.get(
 	viewMapelById,
 );
 
-// 🔹 Endpoint untuk membuat mata pelajaran baru (hanya admin)
+// Endpoint untuk membuat mata pelajaran baru (hanya admin)
 mapelRouter.post(
 	"/api/admin/mapel",
 	authenticate,

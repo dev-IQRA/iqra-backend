@@ -13,7 +13,7 @@ const app = express();
 
 //ensure env
 checkEnv();
-testDbConnection();
+testDbConnection().then(r => console.log(r));
 
 app.use(
 	cors({

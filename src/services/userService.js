@@ -21,7 +21,8 @@ const getAllUsers = async () => {
 			is_verified: true,
 			created_at: true,
 			updated_at: true,
-		},
+			kelas: true
+		}
 	});
 };
 

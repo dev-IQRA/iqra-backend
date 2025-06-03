@@ -36,4 +36,18 @@ const viewAllKelas = async (
 	};
 };
 
-module.exports = { createKelas, findKelasById, viewAllKelas };
+
+const assignSiswaToKelasService = async (siswaId, kelasId) => {
+	if (!siswaId || !kelasId) {
+		throw new Error("Both siswaId and kelasId are required.");
+	}
+
+	return prisma.user.update({
+		where: {id: siswaId},
+		data: {
+			kelas_id: kelasId
+		},
+	});
+};
+
+module.exports = {createKelas, findKelasById, viewAllKelas, assignSiswaToKelasService};
