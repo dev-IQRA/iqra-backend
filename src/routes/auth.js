@@ -13,7 +13,7 @@ const authRouter = Router();
 authRouter.post(
 	"/api/auth/login",
 	preventLoginIfLoggedIn,
-	authLimiter,
+	//authLimiter,
 	validateRequest(loginSchema),
 	login,
 );
